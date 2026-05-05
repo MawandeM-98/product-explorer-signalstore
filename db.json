@@ -1,0 +1,31 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "title": "Smartphone X",
+      "price": 699,
+      "category": "Electronics",
+      "description": "Latest smartphone with amazing features",
+      "image": "https://picsum.photos/200/200?random=1",
+      "rating": 4.5
+    },
+    {
+      "id": 2,
+      "title": "Laptop Pro",
+      "price": 1299,
+      "category": "Electronics",
+      "description": "High-performance laptop for professionals",
+      "image": "https://picsum.photos/200/200?random=2",
+      "rating": 4.8
+    },
+    {
+      "id": 3,
+      "title": "Wireless Headphones",
+      "price": 199,
+      "category": "Audio",
+      "description": "Noise-cancelling wireless headphones",
+      "image": "https://picsum.photos/200/200?random=3",
+      "rating": 4.3
+    }
+  ]
+}
