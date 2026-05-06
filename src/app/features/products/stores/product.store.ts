@@ -1,7 +1,7 @@
 import { signalStore, withState, withMethods, withComputed, patchState } from '@ngrx/signals';
 import { inject, computed } from '@angular/core';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { pipe, switchMap, of, catchError, tap } from 'rxjs';
+import { pipe, switchMap, of, catchError, tap, finalize } from 'rxjs';
 import { Product, RequestStatus } from '../models/product.model';
 import { ProductService } from '../services/product.service';
 
@@ -103,26 +103,27 @@ export const ProductStore = signalStore(
 
       loadProducts,
 
-      addProduct: rxMethod<Omit<Product, 'id'>>(
-        pipe(
-          switchMap((newProduct) =>
-            productService.createProduct(newProduct).pipe(
-              tap((createdProduct) => {
-                if (createdProduct.title && createdProduct.id) {
-                  patchState(store, {
-                    products: [...store.products(), createdProduct],
-                    status: 'success'
-                  });
-                }
-              }),
-              catchError((error) => {
-                patchState(store, { status: 'error', error: error.message || 'Failed to add product' });
-                return of(null);
-              })
-            )
-          )
-        )
-      ),
+      addProduct(newProduct: Omit<Product, 'id'>): void {
+        patchState(store, { status: 'loading', error: null });
+        
+        productService.createProduct(newProduct).subscribe({
+          next: (createdProduct) => {
+            if (createdProduct && createdProduct.id) {
+              patchState(store, {
+                products: [...store.products(), createdProduct],
+                status: 'success',
+                error: null
+              });
+            }
+          },
+          error: (error) => {
+            patchState(store, {
+              status: 'error',
+              error: error.message || 'Failed to add product'
+            });
+          }
+        });
+      },
 
       resetState(): void {
         patchState(store, initialState);
