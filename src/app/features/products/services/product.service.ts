@@ -10,7 +10,7 @@ export class ProductService {
     return this.apiService.getProducts();
   }
 
-  getProductById(id: number) {
+  getProductById(id: string) {
     return this.apiService.getProductById(id);
   }
 
@@ -18,11 +18,11 @@ export class ProductService {
     return this.apiService.createProduct(product);
   }
 
-  updateProduct(id: number, product: Partial<Product>) {
+  updateProduct(id: string, product: Partial<Product>) {
     return this.apiService.updateProduct(id, product);
   }
 
-  deleteProduct(id: number) {
+  deleteProduct(id: string) {
     return this.apiService.deleteProduct(id);
   }
 }

@@ -1,6 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
 import { ProductStore } from '../../stores/product.store';
 import { ProductCardComponent } from '../../components/product-card/product-card.component';
 import { LoadingSpinnerComponent } from '../../components/loading-spinner/loading-spinner.component';
@@ -10,7 +9,7 @@ import { Product } from '../../models/product.model';
 @Component({
   selector: 'app-product-list-page',
   standalone: true,
-  imports: [CommonModule, RouterLink, ProductCardComponent, LoadingSpinnerComponent, ProductFormComponent],
+  imports: [CommonModule, ProductCardComponent, LoadingSpinnerComponent, ProductFormComponent],
   template: `
     <div class="container mx-auto px-4 py-8">
       <!-- Header -->
@@ -131,7 +130,15 @@ export class ProductListPageComponent implements OnInit {
   }
   
   onAddProduct(productData: Partial<Product>): void {
-    this.store.addProduct(productData as Omit<Product, 'id'>);
+    const cleanProduct: Omit<Product, 'id'> = {
+      title: String(productData.title || ''),
+      price: Number(productData.price) || 0,
+      category: String(productData.category || ''),
+      description: String(productData.description || ''),
+      image: String(productData.image || `https://picsum.photos/200/200?random=${Date.now()}`),
+      rating: Number(productData.rating) || 4.0
+    };
+    this.store.addProduct(cleanProduct);
     this.showAddForm = false;
   }
 }

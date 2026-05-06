@@ -1,7 +1,7 @@
 {
   "products": [
     {
-      "id": 1,
+      "id": "1",
       "title": "Smartphone X",
       "price": 699,
       "category": "Electronics",
@@ -10,7 +10,7 @@
       "rating": 4.5
     },
     {
-      "id": 2,
+      "id": "2",
       "title": "Laptop Pro",
       "price": 1299,
       "category": "Electronics",
@@ -19,7 +19,7 @@
       "rating": 4.8
     },
     {
-      "id": 3,
+      "id": "3",
       "title": "Wireless Headphones",
       "price": 199,
       "category": "Audio",
