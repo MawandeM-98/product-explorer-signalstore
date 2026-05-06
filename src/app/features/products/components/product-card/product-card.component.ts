@@ -27,12 +27,12 @@ import { Product } from '../../models/product.model';
         <p class="text-gray-600 text-sm mb-3 line-clamp-2">{{ product().description }}</p>
         <div class="flex justify-between items-center">
           <span class="text-2xl font-bold text-blue-600">\${{ product().price }}</span>
-          <button 
+          <a 
             [routerLink]="['/products', product().id]"
-            class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200"
+            class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200 inline-block"
           >
             View Details
-          </button>
+          </a>
         </div>
       </div>
     </div>
