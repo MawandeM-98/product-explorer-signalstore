@@ -26,10 +26,10 @@ export const ProductStore = signalStore(
   
   withState(initialState),
   
-  withComputed(({ products, searchTerm, status }) => ({
+  withComputed((store) => ({
     filteredProducts: computed(() => {
-      const term = searchTerm().toLowerCase();
-      const allProducts = products();
+      const term = store.searchTerm().toLowerCase();
+      const allProducts = store.products();
       
       if (!term) return allProducts;
       
@@ -40,50 +40,40 @@ export const ProductStore = signalStore(
     }),
     
     selectedProduct: computed(() => {
-      const id = products().selectedProductId;
-      const allProducts = products();
+      const id = store.selectedProductId();
+      const allProducts = store.products();
       return allProducts.find(product => product.id === id) || null;
     }),
     
-    isLoading: computed(() => status() === 'loading'),
-    isSuccess: computed(() => status() === 'success'),
-    isError: computed(() => status() === 'error'),
-    isEmpty: computed(() => products().length === 0 && status() === 'success'),
+    isLoading: computed(() => store.status() === 'loading'),
+    isSuccess: computed(() => store.status() === 'success'),
+    isError: computed(() => store.status() === 'error'),
+    isEmpty: computed(() => store.products().length === 0 && store.status() === 'success'),
+    
     noSearchResults: computed(() => {
-      const term = searchTerm();
-      const filtered = products();
-      const filteredCount = filtered().filter(product => 
-        product.title.toLowerCase().includes(term().toLowerCase()) ||
-        product.category.toLowerCase().includes(term().toLowerCase())
+      const term = store.searchTerm();
+      const allProducts = store.products();
+      if (!term) return false;
+      
+      const filteredCount = allProducts.filter(product => 
+        product.title.toLowerCase().includes(term.toLowerCase()) ||
+        product.category.toLowerCase().includes(term.toLowerCase())
       ).length;
-      return term() && filteredCount === 0 && status() === 'success';
+      
+      return filteredCount === 0 && store.status() === 'success';
     }),
     
-    totalProducts: computed(() => products().length),
+    totalProducts: computed(() => store.products().length),
+    
     uniqueCategories: computed(() => {
-      const categories = products().map(p => p.category);
+      const categories = store.products().map(p => p.category);
       return [...new Set(categories)];
     })
   })),
   
-  withMethods((store, productService = inject(ProductService)) => ({
-    updateSearchTerm(term: string): void {
-      patchState(store, { searchTerm: term });
-    },
-    
-    clearSearch(): void {
-      patchState(store, { searchTerm: '' });
-    },
-    
-    selectProduct(id: number): void {
-      patchState(store, { selectedProductId: id });
-    },
-    
-    clearSelection(): void {
-      patchState(store, { selectedProductId: null });
-    },
-    
-    loadProducts: rxMethod<void>(
+  withMethods((store, productService = inject(ProductService)) => {
+    // Define loadProducts as a method that can be referenced internally
+    const loadProducts = rxMethod<void>(
       pipe(
         tap(() => patchState(store, { status: 'loading', error: null })),
         switchMap(() => 
@@ -105,85 +95,105 @@ export const ProductStore = signalStore(
           )
         )
       )
-    ),
+    );
     
-    addProduct: rxMethod<Omit<Product, 'id'>>(
-      pipe(
-        tap(() => patchState(store, { status: 'loading' })),
-        switchMap((newProduct) =>
-          productService.createProduct(newProduct).pipe(
-            tap((createdProduct) => {
-              patchState(store, {
-                products: [...store.products(), createdProduct],
-                status: 'success'
-              });
-            }),
-            catchError((error) => {
-              patchState(store, {
-                status: 'error',
-                error: error.message || 'Failed to add product'
-              });
-              return of(null);
-            })
+    return {
+      updateSearchTerm(term: string): void {
+        patchState(store, { searchTerm: term });
+      },
+      
+      clearSearch(): void {
+        patchState(store, { searchTerm: '' });
+      },
+      
+      selectProduct(id: number): void {
+        patchState(store, { selectedProductId: id });
+      },
+      
+      clearSelection(): void {
+        patchState(store, { selectedProductId: null });
+      },
+      
+      loadProducts: loadProducts,
+      
+      addProduct: rxMethod<Omit<Product, 'id'>>(
+        pipe(
+          tap(() => patchState(store, { status: 'loading' })),
+          switchMap((newProduct) =>
+            productService.createProduct(newProduct).pipe(
+              tap((createdProduct) => {
+                patchState(store, {
+                  products: [...store.products(), createdProduct],
+                  status: 'success'
+                });
+              }),
+              catchError((error) => {
+                patchState(store, {
+                  status: 'error',
+                  error: error.message || 'Failed to add product'
+                });
+                return of(null);
+              })
+            )
           )
         )
-      )
-    ),
-    
-    updateProduct: rxMethod<{ id: number; product: Partial<Product> }>(
-      pipe(
-        tap(() => patchState(store, { status: 'loading' })),
-        switchMap(({ id, product }) =>
-          productService.updateProduct(id, product).pipe(
-            tap((updatedProduct) => {
-              const updatedProducts = store.products().map(p =>
-                p.id === id ? updatedProduct : p
-              );
-              patchState(store, {
-                products: updatedProducts,
-                status: 'success'
-              });
-            }),
-            catchError((error) => {
-              patchState(store, {
-                status: 'error',
-                error: error.message || 'Failed to update product'
-              });
-              return of(null);
-            })
+      ),
+      
+      updateProduct: rxMethod<{ id: number; product: Partial<Product> }>(
+        pipe(
+          tap(() => patchState(store, { status: 'loading' })),
+          switchMap(({ id, product }) =>
+            productService.updateProduct(id, product).pipe(
+              tap((updatedProduct) => {
+                const updatedProducts = store.products().map(p =>
+                  p.id === id ? updatedProduct : p
+                );
+                patchState(store, {
+                  products: updatedProducts,
+                  status: 'success'
+                });
+              }),
+              catchError((error) => {
+                patchState(store, {
+                  status: 'error',
+                  error: error.message || 'Failed to update product'
+                });
+                return of(null);
+              })
+            )
           )
         )
-      )
-    ),
-    
-    deleteProduct: rxMethod<number>(
-      pipe(
-        tap(() => patchState(store, { status: 'loading' })),
-        switchMap((id) =>
-          productService.deleteProduct(id).pipe(
-            tap(() => {
-              const updatedProducts = store.products().filter(p => p.id !== id);
-              patchState(store, {
-                products: updatedProducts,
-                status: 'success',
-                selectedProductId: store.selectedProductId() === id ? null : store.selectedProductId()
-              });
-            }),
-            catchError((error) => {
-              patchState(store, {
-                status: 'error',
-                error: error.message || 'Failed to delete product'
-              });
-              return of(null);
-            })
+      ),
+      
+      deleteProduct: rxMethod<number>(
+        pipe(
+          tap(() => patchState(store, { status: 'loading' })),
+          switchMap((id) =>
+            productService.deleteProduct(id).pipe(
+              tap(() => {
+                const updatedProducts = store.products().filter(p => p.id !== id);
+                patchState(store, {
+                  products: updatedProducts,
+                  status: 'success',
+                  selectedProductId: store.selectedProductId() === id ? null : store.selectedProductId()
+                });
+              }),
+              catchError((error) => {
+                patchState(store, {
+                  status: 'error',
+                  error: error.message || 'Failed to delete product'
+                });
+                return of(null);
+              })
+            )
           )
         )
-      )
-    ),
-    
-    resetState(): void {
-      patchState(store, initialState);
-      store.loadProducts();
-    }
-  }))
+      ),
+      
+      resetState(): void {
+        patchState(store, initialState);
+        loadProducts(); //
+      }
+    };
+  })
 );
