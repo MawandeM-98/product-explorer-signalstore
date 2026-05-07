@@ -14,7 +14,7 @@ import { Product } from '../../models/product.model';
         <input
           type="text"
           formControlName="title"
-          class="w-full px-3 py-2 border border-[#E2E8F0] rounded-lg focus:ring-2 focus:ring-[#00C2B5] focus:border-[#00C2B5] bg-white text-[#1A1A2E]"
+          class="w-full px-3 py-2 border border-[#E2E8F0] rounded-lg focus:ring-2 focus:ring-[#00C2B5] focus:border-[#00C2B5] bg-white text-[#1A1A2E] text-sm md:text-base"
           [class.border-red-500]="productForm.get('title')?.invalid && productForm.get('title')?.touched"
         />
         @if (productForm.get('title')?.invalid && productForm.get('title')?.touched) {
@@ -23,11 +23,11 @@ import { Product } from '../../models/product.model';
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-[#1A1A2E] mb-1">Price *</label>
+        <label class="block text-sm font-medium text-[#1A1A2E] mb-1">Price (€) *</label>
         <input
           type="number"
           formControlName="price"
-          class="w-full px-3 py-2 border border-[#E2E8F0] rounded-lg focus:ring-2 focus:ring-[#00C2B5] focus:border-[#00C2B5] bg-white text-[#1A1A2E]"
+          class="w-full px-3 py-2 border border-[#E2E8F0] rounded-lg focus:ring-2 focus:ring-[#00C2B5] focus:border-[#00C2B5] bg-white text-[#1A1A2E] text-sm md:text-base"
           [class.border-red-500]="productForm.get('price')?.invalid && productForm.get('price')?.touched"
         />
         @if (productForm.get('price')?.invalid && productForm.get('price')?.touched) {
@@ -40,7 +40,7 @@ import { Product } from '../../models/product.model';
         <input
           type="text"
           formControlName="category"
-          class="w-full px-3 py-2 border border-[#E2E8F0] rounded-lg focus:ring-2 focus:ring-[#00C2B5] focus:border-[#00C2B5] bg-white text-[#1A1A2E]"
+          class="w-full px-3 py-2 border border-[#E2E8F0] rounded-lg focus:ring-2 focus:ring-[#00C2B5] focus:border-[#00C2B5] bg-white text-[#1A1A2E] text-sm md:text-base"
           [class.border-red-500]="productForm.get('category')?.invalid && productForm.get('category')?.touched"
         />
         @if (productForm.get('category')?.invalid && productForm.get('category')?.touched) {
@@ -53,7 +53,7 @@ import { Product } from '../../models/product.model';
         <textarea
           formControlName="description"
           rows="3"
-          class="w-full px-3 py-2 border border-[#E2E8F0] rounded-lg focus:ring-2 focus:ring-[#00C2B5] focus:border-[#00C2B5] bg-white text-[#1A1A2E]"
+          class="w-full px-3 py-2 border border-[#E2E8F0] rounded-lg focus:ring-2 focus:ring-[#00C2B5] focus:border-[#00C2B5] bg-white text-[#1A1A2E] text-sm md:text-base"
         ></textarea>
       </div>
 
@@ -62,34 +62,36 @@ import { Product } from '../../models/product.model';
         <input
           type="text"
           formControlName="image"
-          class="w-full px-3 py-2 border border-[#E2E8F0] rounded-lg focus:ring-2 focus:ring-[#00C2B5] focus:border-[#00C2B5] bg-white text-[#1A1A2E]"
+          placeholder="image3.jpeg (default)"
+          class="w-full px-3 py-2 border border-[#E2E8F0] rounded-lg focus:ring-2 focus:ring-[#00C2B5] focus:border-[#00C2B5] bg-white text-[#1A1A2E] text-sm md:text-base"
         />
+        <p class="text-xs text-[#6B7A99] mt-1">Default: images/image3.jpeg</p>
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-[#1A1A2E] mb-1">Rating</label>
+        <label class="block text-sm font-medium text-[#1A1A2E] mb-1">Rating (0-5)</label>
         <input
           type="number"
           step="0.1"
           min="0"
           max="5"
           formControlName="rating"
-          class="w-full px-3 py-2 border border-[#E2E8F0] rounded-lg focus:ring-2 focus:ring-[#00C2B5] focus:border-[#00C2B5] bg-white text-[#1A1A2E]"
+          class="w-full px-3 py-2 border border-[#E2E8F0] rounded-lg focus:ring-2 focus:ring-[#00C2B5] focus:border-[#00C2B5] bg-white text-[#1A1A2E] text-sm md:text-base"
         />
       </div>
 
-      <div class="flex gap-3 pt-4">
+      <div class="flex flex-col sm:flex-row gap-3 pt-4">
         <button
           type="submit"
           [disabled]="productForm.invalid"
-          class="flex-1 bg-[#00C2B5] text-white px-4 py-2 rounded-lg hover:bg-[#00A89A] transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+          class="flex-1 bg-[#00C2B5] text-white px-4 py-2 rounded-lg hover:bg-[#00A89A] transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed font-medium text-sm md:text-base"
         >
           Create Product
         </button>
         <button
           type="button"
           (click)="cancel.emit()"
-          class="flex-1 bg-white text-[#0D1B3E] px-4 py-2 rounded-lg hover:bg-[#F5F7FA] transition duration-200 border border-[#E2E8F0] font-medium"
+          class="flex-1 bg-white text-[#0D1B3E] px-4 py-2 rounded-lg hover:bg-[#F5F7FA] transition duration-200 border border-[#E2E8F0] font-medium text-sm md:text-base"
         >
           Cancel
         </button>
@@ -113,7 +115,7 @@ export class ProductFormComponent implements OnInit {
       price: [this.product()?.price || '', [Validators.required, Validators.min(0.01)]],
       category: [this.product()?.category || '', Validators.required],
       description: [this.product()?.description || ''],
-      image: [this.product()?.image || 'https://picsum.photos/200/200?random=' + Date.now()],
+      image: [this.product()?.image || 'image3.jpeg'],
       rating: [this.product()?.rating || 4.0, [Validators.min(0), Validators.max(5)]]
     });
   }

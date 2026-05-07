@@ -29,6 +29,18 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "**/*.jpeg",
+                "input": "src/images"
+              },
+              {
+                "glob": "**/*.jpg",
+                "input": "src/images"
+              },
+              {
+                "glob": "**/*.png",
+                "input": "src/images"
               }
             ],
             "styles": [
@@ -88,6 +100,18 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "**/*.jpeg",
+                "input": "src/images"
+              },
+              {
+                "glob": "**/*.jpg",
+                "input": "src/images"
+              },
+              {
+                "glob": "**/*.png",
+                "input": "src/images"
               }
             ],
             "styles": [

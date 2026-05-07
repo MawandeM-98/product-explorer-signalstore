@@ -2,30 +2,49 @@
   "products": [
     {
       "id": "1",
-      "title": "Smartphone X",
-      "price": 699,
-      "category": "Electronics",
-      "description": "Latest smartphone with amazing features",
-      "image": "https://picsum.photos/200/200?random=1",
+      "title": "Mens Pitti Uomo Brown Suits",
+      "price": 339,
+      "category": "Suits",
+      "description": "Brown elegant business attire from purego, crafted for deVere client meetings",
+      "image": "image0.jpeg",
       "rating": 4.5
     },
     {
       "id": "2",
-      "title": "Laptop Pro",
-      "price": 1299,
-      "category": "Electronics",
-      "description": "High-performance laptop for professionals",
-      "image": "https://picsum.photos/200/200?random=2",
+      "title": "Womens Business Attire",
+      "price": 249,
+      "category": "Suits",
+      "description": "Dark tone elegant business attire from purego, crafted for deVere stakeholder gatherings",
+      "image": "image1.jpeg",
       "rating": 4.8
     },
     {
       "id": "3",
-      "title": "Wireless Headphones",
-      "price": 199,
-      "category": "Audio",
-      "description": "Noise-cancelling wireless headphones",
-      "image": "https://picsum.photos/200/200?random=3",
-      "rating": 4.3
+      "title": "Rolex Wrist-Piece",
+      "price": 999,
+      "category": "Accessories",
+      "description": "Elegant and timeless Rolex wrist pieces",
+      "image": "image2.jpeg",
+      "rating": 4.9
+    },
+    {
+      "title": "Stylish Jacket",
+      "price": 200,
+      "category": "Leather attire",
+      "description": "Stylish jackets for men",
+      "image": "image3.jpeg",
+      "rating": 4,
+      "id": "SfgKgmcf7XA"
+    },
+    {
+      "title": "",
+      "price": 0,
+      "category": "",
+      "description": "",
+      "image": "image3.jpeg",
+      "rating": 4,
+      "id": "B82brDfnc00"
     }
-  ]
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }
