@@ -1,5 +1,7 @@
 deVere Product Explorer - Frontend Technical Test
 Project Overview
+
+
 This application is a product catalogue interface built for deVere Group's stakeholder attire collection. It allows users to browse business attire products, search by title or category, view detailed product information, and add new products to the catalogue.
 
 The application was developed as part of a frontend technical assessment, demonstrating comprehensive implementation of modern Angular practices, responsive design, state management, and API integration.
@@ -50,7 +52,9 @@ API Integration
 JSON Server provides a realistic REST API experience during development. The service layer abstracts HTTP calls, making it easy to swap the mock API with a real backend later. All API calls include proper error handling and loading states.
 
 Folder Structure
+
 text
+
 src/
 ├── app/
 │   ├── features/
