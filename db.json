@@ -26,25 +26,6 @@
       "description": "Elegant and timeless Rolex wrist pieces",
       "image": "image2.jpeg",
       "rating": 4.9
-    },
-    {
-      "title": "Stylish Jacket",
-      "price": 200,
-      "category": "Leather attire",
-      "description": "Stylish jackets for men",
-      "image": "image3.jpeg",
-      "rating": 4,
-      "id": "SfgKgmcf7XA"
-    },
-    {
-      "title": "",
-      "price": 0,
-      "category": "",
-      "description": "",
-      "image": "image3.jpeg",
-      "rating": 4,
-      "id": "B82brDfnc00"
     }
-  ],
-  "$schema": "./node_modules/json-server/schema.json"
+  ]
 }

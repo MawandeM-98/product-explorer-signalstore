@@ -25,10 +25,15 @@ import { Product } from '../../models/product.model';
               </p>
             </div>
             <button
-              (click)="showAddForm = !showAddForm"
-              class="bg-[#00C2B5] text-white px-4 md:px-6 py-2 rounded-lg hover:bg-[#00A89A] transition duration-200 font-medium text-sm md:text-base w-full md:w-auto"
+              (click)="toggleAddForm()"
+              [disabled]="store.isAddingProduct()"
+              class="bg-[#00C2B5] text-white px-4 md:px-6 py-2 rounded-lg hover:bg-[#00A89A] transition duration-200 font-medium text-sm md:text-base w-full md:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              + Add Product
+              @if (store.isAddingProduct()) {
+                Adding...
+              } @else {
+                + Add Product
+              }
             </button>
           </div>
         </div>
@@ -42,8 +47,9 @@ import { Product } from '../../models/product.model';
             <h2 class="text-lg md:text-xl font-semibold text-[#1A1A2E] mb-4">Add New Product</h2>
             <app-product-form
               [isEditMode]="false"
+              [isSubmitting]="store.isAddingProduct()"
               (submit)="onAddProduct($event)"
-              (cancel)="showAddForm = false"
+              (cancel)="cancelAddForm()"
             />
           </div>
         }
@@ -143,16 +149,30 @@ export class ProductListPageComponent implements OnInit {
     this.store.loadProducts();
   }
   
+  toggleAddForm(): void {
+    if (!this.store.isAddingProduct()) {
+      this.showAddForm = !this.showAddForm;
+    }
+  }
+  
+  cancelAddForm(): void {
+    this.showAddForm = false;
+  }
+  
   onAddProduct(productData: Partial<Product>): void {
     const cleanProduct: Omit<Product, 'id'> = {
-      title: String(productData.title || ''),
+      title: String(productData.title || '').trim(),
       price: Number(productData.price) || 0,
-      category: String(productData.category || ''),
-      description: String(productData.description || ''),
+      category: String(productData.category || '').trim(),
+      description: String(productData.description || '').trim(),
       image: String(productData.image || 'image3.jpeg'),
       rating: Number(productData.rating) || 4.0
     };
-    this.store.addProduct(cleanProduct);
-    this.showAddForm = false;
+    
+    // Only add if title is not empty
+    if (cleanProduct.title) {
+      this.store.addProduct(cleanProduct);
+      this.showAddForm = false;
+    }
   }
 }

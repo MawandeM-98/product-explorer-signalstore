@@ -10,6 +10,7 @@ interface ProductsState {
   searchTerm: string;
   selectedProductId: string | null;
   status: RequestStatus;
+  addProductStatus: RequestStatus;
   error: string | null;
 }
 
@@ -18,6 +19,7 @@ const initialState: ProductsState = {
   searchTerm: '',
   selectedProductId: null,
   status: 'idle',
+  addProductStatus: 'idle',
   error: null
 };
 
@@ -43,6 +45,7 @@ export const ProductStore = signalStore(
     }),
 
     isLoading: computed(() => store.status() === 'loading'),
+    isAddingProduct: computed(() => store.addProductStatus() === 'loading'),
     isSuccess: computed(() => store.status() === 'success'),
     isError: computed(() => store.status() === 'error'),
     isEmpty: computed(() => store.products().length === 0 && store.status() === 'success'),
@@ -104,20 +107,34 @@ export const ProductStore = signalStore(
       loadProducts,
 
       addProduct(newProduct: Omit<Product, 'id'>): void {
-        patchState(store, { status: 'loading', error: null });
+        // Prevent duplicate submissions
+        if (store.addProductStatus() === 'loading') {
+          return;
+        }
+        
+        patchState(store, { addProductStatus: 'loading', error: null });
         
         productService.createProduct(newProduct).subscribe({
           next: (createdProduct) => {
-            if (createdProduct && createdProduct.id) {
-              patchState(store, {
-                products: [...store.products(), createdProduct],
-                status: 'success',
-                error: null
-              });
+            if (createdProduct && createdProduct.id && createdProduct.title) {
+              const currentProducts = store.products();
+              // Check if product already exists to prevent duplicates
+              const exists = currentProducts.some(p => p.id === createdProduct.id);
+              if (!exists) {
+                patchState(store, {
+                  products: [...currentProducts, createdProduct],
+                  addProductStatus: 'success',
+                  status: 'success',
+                  error: null
+                });
+              } else {
+                patchState(store, { addProductStatus: 'success', error: null });
+              }
             }
           },
           error: (error) => {
             patchState(store, {
+              addProductStatus: 'error',
               status: 'error',
               error: error.message || 'Failed to add product'
             });
