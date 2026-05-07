@@ -7,7 +7,7 @@ import { Product } from '../../models/product.model';
   standalone: true,
   imports: [RouterLink],
   template: `
-    <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition duration-300">
+    <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition duration-300 border border-[#E2E8F0]">
       <img 
         [src]="product().image" 
         [alt]="product().title"
@@ -15,21 +15,23 @@ import { Product } from '../../models/product.model';
       />
       <div class="p-4">
         <div class="flex justify-between items-start mb-2">
-          <h3 class="text-lg font-semibold text-gray-800">{{ product().title }}</h3>
-          <span class="text-sm text-gray-500">{{ product().category }}</span>
+          <h3 class="text-lg font-semibold text-[#1A1A2E]">{{ product().title }}</h3>
+          <span class="text-xs text-[#6B7A99] bg-[#F5F7FA] px-2 py-1 rounded">
+            {{ product().category }}
+          </span>
         </div>
         <div class="flex items-center mb-2">
           <div class="flex items-center">
-            <span class="text-yellow-400">★</span>
-            <span class="text-sm text-gray-600 ml-1">{{ product().rating }}</span>
+            <span class="text-[#00C2B5]">★</span>
+            <span class="text-sm text-[#6B7A99] ml-1">{{ product().rating }}</span>
           </div>
         </div>
-        <p class="text-gray-600 text-sm mb-3 line-clamp-2">{{ product().description }}</p>
+        <p class="text-[#6B7A99] text-sm mb-3 line-clamp-2">{{ product().description }}</p>
         <div class="flex justify-between items-center">
-          <span class="text-2xl font-bold text-blue-600">\${{ product().price }}</span>
+          <span class="text-2xl font-bold text-[#0D1B3E]">\${{ product().price }}</span>
           <a 
             [routerLink]="['/products', product().id]"
-            class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200 inline-block"
+            class="bg-[#00C2B5] text-white px-4 py-2 rounded-lg hover:bg-[#00A89A] transition duration-200 inline-block font-medium"
           >
             View Details
           </a>

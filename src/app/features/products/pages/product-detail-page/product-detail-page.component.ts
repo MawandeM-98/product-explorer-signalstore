@@ -10,11 +10,21 @@ import { Product } from '../../models/product.model';
   standalone: true,
   imports: [CommonModule, RouterLink, LoadingSpinnerComponent],
   template: `
+    <!-- deVere Header -->
+    <div class="bg-[#0D1B3E] border-b border-[#1A2E5A]">
+      <div class="container mx-auto px-4 py-6">
+        <h1 class="text-2xl md:text-3xl font-bold text-white">
+          deVere <span class="text-[#00C2B5]">productExplorer</span>
+        </h1>
+        <p class="text-[#6B7A99] text-sm mt-1">Product Details</p>
+      </div>
+    </div>
+
     <div class="container mx-auto px-4 py-8">
       <!-- Back Button -->
       <button
         (click)="goBack()"
-        class="mb-6 flex items-center text-blue-600 hover:text-blue-700"
+        class="mb-6 flex items-center text-[#00C2B5] hover:text-[#00A89A] transition duration-200"
       >
         ← Back to Products
       </button>
@@ -30,7 +40,7 @@ import { Product } from '../../models/product.model';
           <p class="text-red-600 mb-4">{{ store.error() }}</p>
           <button
             (click)="goBack()"
-            class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"
+            class="bg-[#00C2B5] text-white px-4 py-2 rounded-lg hover:bg-[#00A89A] transition duration-200"
           >
             Go Back
           </button>
@@ -39,9 +49,9 @@ import { Product } from '../../models/product.model';
 
       <!-- Product Found -->
       @else if (product) {
-        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+        <div class="bg-white rounded-lg shadow-md overflow-hidden border border-[#E2E8F0]">
           <div class="md:flex">
-            <div class="md:w-1/2">
+            <div class="md:w-1/2 bg-[#F5F7FA]">
               <img
                 [src]="product.image"
                 [alt]="product.title"
@@ -50,21 +60,26 @@ import { Product } from '../../models/product.model';
             </div>
             <div class="md:w-1/2 p-6">
               <div class="flex justify-between items-start mb-4">
-                <h1 class="text-3xl font-bold text-gray-800">{{ product.title }}</h1>
-                <span class="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-sm">
+                <h1 class="text-3xl font-bold text-[#1A1A2E]">{{ product.title }}</h1>
+                <span class="bg-[#F5F7FA] text-[#6B7A99] px-3 py-1 rounded-full text-sm border border-[#E2E8F0]">
                   {{ product.category }}
                 </span>
               </div>
 
               <div class="flex items-center mb-4">
-                <span class="text-yellow-400 text-xl">★</span>
-                <span class="text-lg text-gray-600 ml-1">{{ product.rating }}</span>
+                <span class="text-[#00C2B5] text-xl">★</span>
+                <span class="text-lg text-[#6B7A99] ml-1">{{ product.rating }}</span>
               </div>
 
-              <p class="text-gray-600 mb-6 leading-relaxed">{{ product.description }}</p>
+              <p class="text-[#6B7A99] mb-6 leading-relaxed">{{ product.description }}</p>
 
               <div class="mb-6">
-                <span class="text-4xl font-bold text-blue-600">\${{ product.price }}</span>
+                <span class="text-4xl font-bold text-[#0D1B3E]">\${{ product.price }}</span>
+              </div>
+
+              <!-- Product Metadata -->
+              <div class="border-t border-[#E2E8F0] pt-4 mt-4">
+                <p class="text-sm text-[#6B7A99]">Product ID: <span class="text-[#1A1A2E] font-mono">{{ product.id }}</span></p>
               </div>
             </div>
           </div>
@@ -77,7 +92,7 @@ import { Product } from '../../models/product.model';
           <p class="text-yellow-700 mb-4">Product not found!</p>
           <button
             (click)="goBack()"
-            class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+            class="bg-[#00C2B5] text-white px-4 py-2 rounded-lg hover:bg-[#00A89A] transition duration-200"
           >
             Back to Products
           </button>
