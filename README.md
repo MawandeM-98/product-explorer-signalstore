@@ -24,11 +24,14 @@ Welcome to the **deVere Product Explorer** – a curated catalogue of classy bus
 Go into the project folder
 
 bash
+
 cd product-explorer-signalstore
 Install dependencies
 
 bash
 npm install
+
+
 Start the fake database (JSON Server)
 
 Open a terminal and run:
