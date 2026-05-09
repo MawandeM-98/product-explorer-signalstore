@@ -62,10 +62,10 @@ import { Product } from '../../models/product.model';
         <input
           type="text"
           formControlName="image"
-          placeholder="image3.jpeg (default)"
+          [placeholder]="defaultImage() + ' (default)'"
           class="w-full px-3 py-2 border border-[#E2E8F0] rounded-lg focus:ring-2 focus:ring-[#00C2B5] focus:border-[#00C2B5] bg-white text-[#1A1A2E] text-sm md:text-base"
         />
-        <p class="text-xs text-[#6B7A99] mt-1">Default: image3.jpeg</p>
+        <p class="text-xs text-[#6B7A99] mt-1">Default: {{ defaultImage() }}</p>
       </div>
 
       <div>
@@ -110,6 +110,7 @@ export class ProductFormComponent implements OnInit {
   product = input<Product | null>(null);
   isEditMode = input(false);
   isSubmitting = input(false);
+  defaultImage = input<string>('image3.jpeg');
   submit = output<Partial<Product>>();
   cancel = output<void>();
   
@@ -121,7 +122,7 @@ export class ProductFormComponent implements OnInit {
       price: [this.product()?.price || '', [Validators.required, Validators.min(0.01)]],
       category: [this.product()?.category || '', Validators.required],
       description: [this.product()?.description || ''],
-      image: [this.product()?.image || 'image3.jpeg'],
+      image: [this.product()?.image || this.defaultImage()],
       rating: [this.product()?.rating || 4.0, [Validators.min(0), Validators.max(5)]]
     });
   }

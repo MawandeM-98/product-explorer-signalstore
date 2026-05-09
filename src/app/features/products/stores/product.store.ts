@@ -29,45 +29,71 @@ export const ProductStore = signalStore(
   
   withState(initialState),
   
-  withComputed((store) => ({
-    filteredProducts: computed(() => {
+  withComputed((store) => {
+    const authStore = inject(AuthStore);
+    
+    // Define filteredProducts first
+    const filteredProducts = computed(() => {
       const term = store.searchTerm().toLowerCase();
       const allProducts = store.products();
-      if (!term) return allProducts;
-      return allProducts.filter(product =>
+      const currentUser = authStore.currentUser();
+      const isAdmin = currentUser?.role === 'admin';
+      
+      if (!currentUser) return [];
+      
+      // Filter based on user role and product ownership
+      let visibleProducts = allProducts.filter(product => {
+        // Hardcoded products (no createdBy field) - show to everyone
+        if (!product.createdBy) {
+          return true;
+        }
+        
+        // Admin sees everything
+        if (isAdmin) {
+          return true;
+        }
+        
+        // Regular user sees only their own products OR products with no createdBy
+        return product.createdBy === currentUser.username;
+      });
+      
+      // Apply search filter
+      if (!term) return visibleProducts;
+      return visibleProducts.filter(product =>
         product.title?.toLowerCase().includes(term) ||
         product.category?.toLowerCase().includes(term)
       );
-    }),
+    });
+    
+    return {
+      filteredProducts,
+      
+      selectedProduct: computed(() => {
+        const id = store.selectedProductId();
+        return store.products().find(product => product.id === id) || null;
+      }),
 
-    selectedProduct: computed(() => {
-      const id = store.selectedProductId();
-      return store.products().find(product => product.id === id) || null;
-    }),
+      isLoading: computed(() => store.status() === 'loading'),
+      isAddingProduct: computed(() => store.addProductStatus() === 'loading'),
+      isSuccess: computed(() => store.status() === 'success'),
+      isError: computed(() => store.status() === 'error'),
+      isEmpty: computed(() => filteredProducts().length === 0 && store.status() === 'success'),
 
-    isLoading: computed(() => store.status() === 'loading'),
-    isAddingProduct: computed(() => store.addProductStatus() === 'loading'),
-    isSuccess: computed(() => store.status() === 'success'),
-    isError: computed(() => store.status() === 'error'),
-    isEmpty: computed(() => store.products().length === 0 && store.status() === 'success'),
+      noSearchResults: computed(() => {
+        const term = store.searchTerm();
+        if (!term) return false;
+        const filtered = filteredProducts();
+        return filtered.length === 0 && store.status() === 'success';
+      }),
 
-    noSearchResults: computed(() => {
-      const term = store.searchTerm();
-      if (!term) return false;
-      const filtered = store.products().filter(product =>
-        product.title?.toLowerCase().includes(term.toLowerCase()) ||
-        product.category?.toLowerCase().includes(term.toLowerCase())
-      );
-      return filtered.length === 0 && store.status() === 'success';
-    }),
+      totalProducts: computed(() => filteredProducts().length),
 
-    totalProducts: computed(() => store.products().length),
-
-    uniqueCategories: computed(() => {
-      const categories = store.products().map(p => p.category).filter(Boolean);
-      return [...new Set(categories)];
-    })
-  })),
+      uniqueCategories: computed(() => {
+        const categories = filteredProducts().map(p => p.category).filter(Boolean);
+        return [...new Set(categories)];
+      })
+    };
+  }),
   
   withMethods((store, productService = inject(ProductService), authStore = inject(AuthStore)) => {
     const loadProducts = rxMethod<void>(
@@ -112,7 +138,6 @@ export const ProductStore = signalStore(
           return;
         }
         
-        // Add the current logged-in user as createdBy
         const currentUser = authStore.currentUser();
         const productWithCreator = {
           ...newProduct,

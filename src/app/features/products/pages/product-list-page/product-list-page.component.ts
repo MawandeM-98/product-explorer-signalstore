@@ -53,7 +53,6 @@ import { Product } from '../../models/product.model';
         </div>
       </div>
 
-      <!-- Rest of your template remains exactly the same -->
       <!-- Main Content -->
       <div class="container mx-auto px-4 py-6 md:py-8">
         <!-- Add Product Form -->
@@ -63,6 +62,7 @@ import { Product } from '../../models/product.model';
             <app-product-form
               [isEditMode]="false"
               [isSubmitting]="store.isAddingProduct()"
+              [defaultImage]="defaultImageForUser()"
               (submit)="onAddProduct($event)"
               (cancel)="cancelAddForm()"
             />
@@ -171,6 +171,11 @@ export class ProductListPageComponent implements OnInit {
     this.store.loadProducts();
   }
   
+  defaultImageForUser(): string {
+    const isAdmin = this.authStore.currentUser()?.role === 'admin';
+    return isAdmin ? 'image3.jpeg' : 'image4.jpeg';
+  }
+  
   toggleAddForm(): void {
     if (!this.store.isAddingProduct()) {
       this.showAddForm = !this.showAddForm;
@@ -182,14 +187,17 @@ export class ProductListPageComponent implements OnInit {
   }
   
   onAddProduct(productData: Partial<Product>): void {
+    const isAdmin = this.authStore.currentUser()?.role === 'admin';
+    const defaultImage = isAdmin ? 'image3.jpeg' : 'image4.jpeg';
+    
     const cleanProduct: Omit<Product, 'id'> = {
       title: String(productData.title || '').trim(),
       price: Number(productData.price) || 0,
       category: String(productData.category || '').trim(),
       description: String(productData.description || '').trim(),
-      image: String(productData.image || 'image3.jpeg'),
+      image: String(productData.image || defaultImage),
       rating: Number(productData.rating) || 4.0,
-      createdBy: this.authStore.username() // Add the current user
+      createdBy: this.authStore.username()
     };
     
     if (cleanProduct.title) {
