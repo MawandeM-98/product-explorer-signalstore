@@ -34,15 +34,15 @@ Start the fake database (JSON Server)
 Open a terminal and run:
 
 bash
-npx json-server --watch db.json --port 3000
+**npx json-server --watch db.json --port 3000**
 You should see JSON Server started on PORT :3000
 
-Start the Angular app
+Start the Angular 19.2.0 app
 
 Open a second terminal and run:
 
 bash
-ng serve
+**ng serve**
 You should see http://localhost:4200
 
 Open your browser
@@ -60,3 +60,6 @@ Admin sees all products (hardcoded + admin added + user added)
 
 User sees hardcoded products + only products they added themselves
 
+**Note for Ivan,Antonio and other deVere testers: used develop branch as it works best for testing, before merging to main when code is production ready**
+
+Check wiki page on github for notes,AI usage , tradeoffs and assumptions !

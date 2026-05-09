@@ -125,7 +125,7 @@ import { AuthStore } from '../stores/auth.store';
           <!-- Footer -->
           <div class="mt-6 text-center">
             <p class="text-xs font-semibold text-[#6B7A99] tracking-wide">
-              SECURED ACCESS FOR DE VERE STAKEHOLDERS
+              SECURED ACCESS FOR dEVERE STAKEHOLDERS
             </p>
           </div>
         </div>

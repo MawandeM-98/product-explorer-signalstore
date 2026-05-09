@@ -32,7 +32,7 @@ export const ProductStore = signalStore(
   withComputed((store) => {
     const authStore = inject(AuthStore);
     
-    // Define filteredProducts first
+    
     const filteredProducts = computed(() => {
       const term = store.searchTerm().toLowerCase();
       const allProducts = store.products();
