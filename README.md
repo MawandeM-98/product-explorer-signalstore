@@ -52,14 +52,15 @@ Go to http://localhost:4200
 You will be redirected to the login page.
 
 🔐 Demo Login Credentials
-Username|Password|Role
-admin   |  admin |Admin
-user    |  user  |User
+Username: admin | Password: admin | Role: Admin
+Username: user | Password: user| Role: User
+Password and Username are case-sensitive
+
 
 Admin sees all products (hardcoded + admin added + user added)
 
 User sees hardcoded products + only products they added themselves
 
-**Note for Ivan,Antonio and other deVere testers: used develop branch as it works best for testing, before merging to main when code is production ready**
+**Note for Ivan,Antonio and other deVere testers: used develop branch as it works best for testing, before merging to main when code is production ready . Also Key note: Password and Username are case-sensitive so they have to be in lowercase.**
 
 Check wiki page on github for notes,AI usage , tradeoffs and assumptions !
