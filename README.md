@@ -26,9 +26,11 @@ Go into the project folder
 bash
 
 cd product-explorer-signalstore
+
 Install dependencies
 
 bash
+
 npm install
 
 
@@ -38,7 +40,17 @@ Open a terminal and run:
 
 bash
 **npx json-server --watch db.json --port 3000**
+
 You should see JSON Server started on PORT :3000
+
+It will give the two following endpoints:
+Endpoints:
+http://localhost:3000/products
+
+&
+
+http://localhost:3000/users
+
 
 Start the Angular 19.2.0 app
 
