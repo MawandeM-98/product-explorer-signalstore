@@ -1,9 +1,10 @@
 import { signalStore, withState, withMethods, withComputed, patchState } from '@ngrx/signals';
 import { inject, computed } from '@angular/core';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { pipe, switchMap, of, catchError, tap, finalize } from 'rxjs';
+import { pipe, switchMap, of, catchError, tap } from 'rxjs';
 import { Product, RequestStatus } from '../models/product.model';
 import { ProductService } from '../services/product.service';
+import { AuthStore } from '../../auth/stores/auth.store';
 
 interface ProductsState {
   products: Product[];
@@ -68,7 +69,7 @@ export const ProductStore = signalStore(
     })
   })),
   
-  withMethods((store, productService = inject(ProductService)) => {
+  withMethods((store, productService = inject(ProductService), authStore = inject(AuthStore)) => {
     const loadProducts = rxMethod<void>(
       pipe(
         tap(() => patchState(store, { status: 'loading', error: null })),
@@ -107,18 +108,23 @@ export const ProductStore = signalStore(
       loadProducts,
 
       addProduct(newProduct: Omit<Product, 'id'>): void {
-        // Prevent duplicate submissions
         if (store.addProductStatus() === 'loading') {
           return;
         }
         
+        // Add the current logged-in user as createdBy
+        const currentUser = authStore.currentUser();
+        const productWithCreator = {
+          ...newProduct,
+          createdBy: currentUser?.username || 'unknown'
+        };
+        
         patchState(store, { addProductStatus: 'loading', error: null });
         
-        productService.createProduct(newProduct).subscribe({
+        productService.createProduct(productWithCreator).subscribe({
           next: (createdProduct) => {
             if (createdProduct && createdProduct.id && createdProduct.title) {
               const currentProducts = store.products();
-              // Check if product already exists to prevent duplicates
               const exists = currentProducts.some(p => p.id === createdProduct.id);
               if (!exists) {
                 patchState(store, {

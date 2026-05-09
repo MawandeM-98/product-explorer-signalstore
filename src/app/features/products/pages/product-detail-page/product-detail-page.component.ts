@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ProductStore } from '../../stores/product.store';
+import { AuthStore } from '../../../auth/stores/auth.store'; 
 import { LoadingSpinnerComponent } from '../../components/loading-spinner/loading-spinner.component';
 import { Product } from '../../models/product.model';
 
@@ -13,12 +14,22 @@ import { Product } from '../../models/product.model';
     <!-- deVere Header -->
     <div class="bg-[#0D1B3E] border-b border-[#1A2E5A]">
       <div class="container mx-auto px-4 py-4 md:py-6">
-        <h1 class="text-xl md:text-2xl lg:text-3xl font-bold text-white">
-          deVere <span class="text-[#00C2B5]">productExplorer</span>
-        </h1>
-        <p class="text-white text-sm md:text-base mt-1">
-          Classy business attire catalogue catering strictly for deVere stakeholders
-        </p>
+        <div class="flex justify-between items-center">
+          <div>
+            <h1 class="text-xl md:text-2xl lg:text-3xl font-bold text-white">
+              deVere <span class="text-[#00C2B5]">productExplorer</span>
+            </h1>
+            <p class="text-white text-sm md:text-base mt-1">
+              Classy business attire catalogue catering strictly for deVere stakeholders
+            </p>
+          </div>
+          <button
+            (click)="logout()"
+            class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition duration-200 text-sm"
+          >
+            Logout
+          </button>
+        </div>
       </div>
     </div>
 
@@ -88,9 +99,12 @@ import { Product } from '../../models/product.model';
               </div>
 
               <!-- Product Metadata -->
-              <div class="border-t border-[#E2E8F0] pt-4 mt-4">
+              <div class="border-t border-[#E2E8F0] pt-4 mt-4 space-y-2">
                 <p class="text-xs md:text-sm text-[#6B7A99]">
                   Product ID: <span class="text-[#1A1A2E] font-mono">{{ product.id }}</span>
+                </p>
+                <p class="text-xs md:text-sm text-[#6B7A99]">
+                  Added by: <span class="text-[#00C2B5] font-medium">{{ product.createdBy }}</span>
                 </p>
               </div>
             </div>
@@ -116,6 +130,7 @@ import { Product } from '../../models/product.model';
 export class ProductDetailPageComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private authStore = inject(AuthStore);
   store = inject(ProductStore);
 
   product: Product | null = null;
@@ -145,8 +160,13 @@ export class ProductDetailPageComponent implements OnInit {
     this.router.navigate(['/']);
   }
 
+  logout(): void {
+    this.authStore.logout();
+    this.router.navigate(['/login']);
+  }
+
   handleImageError(event: Event): void {
     const img = event.target as HTMLImageElement;
-    img.src = 'images/image0.jpeg';
+    img.src = 'image0.jpeg';
   }
 }

@@ -7,7 +7,8 @@
       "category": "Suits",
       "description": "Brown elegant business attire from purego, crafted for deVere client meetings",
       "image": "image0.jpeg",
-      "rating": 4.5
+      "rating": 4.5,
+      "createdBy": "admin"
     },
     {
       "id": "2",
@@ -16,7 +17,8 @@
       "category": "Suits",
       "description": "Dark tone elegant business attire from purego, crafted for deVere stakeholder gatherings",
       "image": "image1.jpeg",
-      "rating": 4.8
+      "rating": 4.8,
+      "createdBy": "admin"
     },
     {
       "id": "3",
@@ -25,7 +27,22 @@
       "category": "Accessories",
       "description": "Elegant and timeless Rolex wrist pieces",
       "image": "image2.jpeg",
-      "rating": 4.9
+      "rating": 4.9,
+      "createdBy": "admin"
+    }
+  ],
+  "users": [
+    {
+      "id": "1",
+      "username": "admin",
+      "password": "admin",
+      "role": "admin"
+    },
+    {
+      "id": "2",
+      "username": "user",
+      "password": "user",
+      "role": "user"
     }
   ]
 }

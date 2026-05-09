@@ -1,6 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { ProductStore } from '../../stores/product.store';
+import { AuthStore } from '../../../auth/stores/auth.store';
 import { ProductCardComponent } from '../../components/product-card/product-card.component';
 import { LoadingSpinnerComponent } from '../../components/loading-spinner/loading-spinner.component';
 import { ProductFormComponent } from '../../components/product-form/product-form.component';
@@ -23,22 +25,35 @@ import { Product } from '../../models/product.model';
               <p class="text-white text-sm md:text-base mt-2 max-w-2xl">
                 Classy business attire catalogue catering strictly for deVere stakeholders
               </p>
+              <!-- Welcome Message -->
+              <p class="text-[#00C2B5] text-sm mt-2">
+                Welcome back, {{ authStore.username() }} ({{ authStore.currentUser()?.role }})
+              </p>
             </div>
-            <button
-              (click)="toggleAddForm()"
-              [disabled]="store.isAddingProduct()"
-              class="bg-[#00C2B5] text-white px-4 md:px-6 py-2 rounded-lg hover:bg-[#00A89A] transition duration-200 font-medium text-sm md:text-base w-full md:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              @if (store.isAddingProduct()) {
-                Adding...
-              } @else {
-                + Add Product
-              }
-            </button>
+            <div class="flex gap-3">
+              <button
+                (click)="toggleAddForm()"
+                [disabled]="store.isAddingProduct()"
+                class="bg-[#00C2B5] text-white px-4 md:px-6 py-2 rounded-lg hover:bg-[#00A89A] transition duration-200 font-medium text-sm md:text-base w-full md:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                @if (store.isAddingProduct()) {
+                  Adding...
+                } @else {
+                  + Add Product
+                }
+              </button>
+              <button
+                (click)="logout()"
+                class="bg-red-600 text-white px-4 md:px-6 py-2 rounded-lg hover:bg-red-700 transition duration-200 font-medium text-sm md:text-base"
+              >
+                Logout
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
+      <!-- Rest of your template remains exactly the same -->
       <!-- Main Content -->
       <div class="container mx-auto px-4 py-6 md:py-8">
         <!-- Add Product Form -->
@@ -75,7 +90,7 @@ import { Product } from '../../models/product.model';
           </div>
         </div>
 
-        <!-- Stats Cards - Navy Theme with White Text -->
+        <!-- Stats Cards -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
           <div class="bg-gradient-to-br from-[#0D1B3E] to-[#1A2E5A] rounded-lg p-4 md:p-6 shadow-lg">
             <p class="text-white text-xs md:text-sm uppercase tracking-wide opacity-80">Total Products</p>
@@ -143,9 +158,16 @@ import { Product } from '../../models/product.model';
 })
 export class ProductListPageComponent implements OnInit {
   store = inject(ProductStore);
+  authStore = inject(AuthStore);
+  private router = inject(Router);
   showAddForm = false;
   
   ngOnInit(): void {
+    // Check if user is authenticated
+    if (!this.authStore.isAuthenticated()) {
+      this.router.navigate(['/login']);
+      return;
+    }
     this.store.loadProducts();
   }
   
@@ -166,13 +188,18 @@ export class ProductListPageComponent implements OnInit {
       category: String(productData.category || '').trim(),
       description: String(productData.description || '').trim(),
       image: String(productData.image || 'image3.jpeg'),
-      rating: Number(productData.rating) || 4.0
+      rating: Number(productData.rating) || 4.0,
+      createdBy: this.authStore.username() // Add the current user
     };
     
-    // Only add if title is not empty
     if (cleanProduct.title) {
       this.store.addProduct(cleanProduct);
       this.showAddForm = false;
     }
+  }
+  
+  logout(): void {
+    this.authStore.logout();
+    this.router.navigate(['/login']);
   }
 }

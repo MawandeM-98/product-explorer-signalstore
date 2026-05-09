@@ -29,11 +29,14 @@ import { Product } from '../../models/product.model';
           </span>
         </div>
         
-        <div class="flex items-center mb-2">
+        <div class="flex items-center justify-between mb-2">
           <div class="flex items-center">
             <span class="text-[#00C2B5] text-sm md:text-base">★</span>
             <span class="text-sm text-[#6B7A99] ml-1">{{ product().rating }}</span>
           </div>
+          <span class="text-xs text-[#6B7A99]">
+            Added by: {{ product().createdBy }}
+          </span>
         </div>
         
         <p class="text-[#6B7A99] text-xs md:text-sm mb-3 line-clamp-2 flex-grow">
@@ -58,6 +61,6 @@ export class ProductCardComponent {
   
   handleImageError(event: Event): void {
     const img = event.target as HTMLImageElement;
-    img.src = 'images/image0.jpeg'; // Fallback image
+    img.src = 'image0.jpeg';
   }
 }
