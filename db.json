@@ -26,6 +26,36 @@
       "description": "Elegant and timeless Rolex wrist pieces",
       "image": "image2.jpeg",
       "rating": 4.9
+    },
+    {
+      "title": "Black Jacket",
+      "price": 29,
+      "category": "Menswear",
+      "description": "dgu09dgju8zdfngu8zdsgnu8eszdn",
+      "image": "image3.jpeg",
+      "rating": 4,
+      "createdBy": "admin",
+      "id": "I9uT7lzG8zY"
+    },
+    {
+      "title": "Blue suit",
+      "price": 20,
+      "category": "Menswear",
+      "description": "xfobnsfivjnsubnsub",
+      "image": "image4.jpeg",
+      "rating": 5,
+      "createdBy": "user",
+      "id": "ALfwqhXINGw"
+    },
+    {
+      "title": "Setha underwear",
+      "price": 100,
+      "category": "Undwerwear",
+      "description": "pfhjdpfogjdo-fje0og0fposjbhsdpobs9pbjusd9pgsrhp09",
+      "image": "image3.jpeg",
+      "rating": 4,
+      "createdBy": "admin",
+      "id": "eRlOtA6KxHM"
     }
   ],
   "users": [
@@ -41,5 +71,6 @@
       "password": "user",
       "role": "user"
     }
-  ]
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }
